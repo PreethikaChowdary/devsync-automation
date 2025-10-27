@@ -1,99 +1,26 @@
 name: Daily Automated Commit
 
-   on:
-     schedule:
-       # Runs at 09:30 UTC every day
-       - cron: "30 9 * * *"
-     workflow_dispatch: # Allows manual trigger
+on:
+  schedule:
+    # Runs every day at 09:30 UTC (adjust if needed)
+    - cron: "30 9 * * *"
+  workflow_dispatch:  # allows manual trigger
 
-   jobs:
-     daily-commit:
-       runs-on: ubuntu-latest
-       permissions:
-         contents: write
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
-       steps:
-         - name: Checkout repository
-           uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-         - name: Step for 24f2002054@ds.study.iitm.ac.in
-           run: |
-             echo "Running scheduled task for 24f2002054@ds.study.iitm.ac.in"
-             echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-
-         - name: Create daily update file
-           run: |
-             mkdir -p daily-updates
-             echo "Daily update: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> daily-updates/log.txt
-             echo "Repository activity tracked" >> daily-updates/log.txt
-             echo "---" >> daily-updates/log.txt
-
-         - name: Commit and push changes
-           run: |
-             git config --local user.email "github-actions[bot]@users.noreply.github.com"
-             git config --local user.name "github-actions[bot]"
-             git add .
-             git commit -m "Automated daily update - $(date -u '+%Y-%m-%d %H:%M:%S UTC') [skip ci]" || exit 0
-             git push
-```
-
-4. Scroll down and click **"Commit changes"**
-5. Click **"Commit changes"** again in the popup
-
----
-
-## **Step 3: Manually Test the Workflow**
-
-Now let's test it to make sure it works:
-
-1. Click on the **"Actions"** tab at the top of your repository
-
-2. You should see **"Daily Automated Commit"** in the left sidebar
-   - Click on it
-
-3. You'll see a **"Run workflow"** button on the right side
-   - Click **"Run workflow"**
-   - Select **"Branch: main"**
-   - Click the green **"Run workflow"** button
-
-4. **Wait 10-30 seconds**, then refresh the page
-
-5. You should see a yellow circle 🟡 (running) or green checkmark ✅ (completed)
-
-6. Click on the workflow run to see details
-
----
-
-## **Step 4: Verify the Commit Was Created**
-
-1. Go back to your repository main page (click **"<> Code"** tab)
-
-2. You should see:
-   - A new commit message like: `"Automated daily update - 2025-10-27 12:34:56 UTC"`
-   - A new folder called `daily-updates/`
-   - Inside it, a file called `log.txt`
-
-3. Click on `daily-updates/log.txt` to see the content
-
----
-
-## **Step 5: Check That It Will Run Daily**
-
-1. Go to **"Actions"** tab
-2. Click on **"Daily Automated Commit"** workflow
-3. You should see:
-   - Your manual test run (with ✅ green checkmark)
-   - Schedule information showing it runs at 09:30 UTC daily
-
----
-
-## **Step 6: Submit Your Repository URL**
-
-Your repository URL format should be:
-```
-https://github.com/YOUR_USERNAME/devsync-automation
-```
-
-For example:
-```
-https://github.com/john-doe/devsync-automation
+      - name: Commit daily update by 24f2002054@ds.study.iitm.ac.in
+        run: |
+          echo "Automated update on $(date)" >> daily-log.txt
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add daily-log.txt
+          git commit -m "Daily automated commit on $(date)"
+          git push
